@@ -16,6 +16,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+Console.WriteLine("created dev branch");
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

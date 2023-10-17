@@ -6,5 +6,6 @@ namespace Application.LogicInterface;
 public interface IUserLogic
 {
     public Task<User> CreateAsync(UserCreationDTO dto);
-   
+
+    public Task<User> ValidateLogin(UserCreationDTO dto);
 }

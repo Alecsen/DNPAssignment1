@@ -32,4 +32,21 @@ public class UsersController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
+
+    [HttpPost]
+    [Route("login")]
+    public async Task<ActionResult<User>> GetAsync([FromBody] UserCreationDTO dto)
+    {
+        try
+        {
+            User user = await userLogic.ValidateLogin(dto);
+            return Ok(user);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
+    
 }

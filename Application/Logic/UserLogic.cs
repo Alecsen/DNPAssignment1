@@ -32,7 +32,7 @@ public class UserLogic : IUserLogic
         return created;
     }
 
-    public async Task<User> ValidateLogin(UserCreationDTO dto)
+    public async Task<UserLoginDTO> ValidateLogin(UserCreationDTO dto)
     {
         User? existing = await userDao.GetByUsernameAsync(dto.UserName);
         if (existing == null)
@@ -43,13 +43,9 @@ public class UserLogic : IUserLogic
             throw new Exception("Wrong password");
         }
 
-        User validatedUser = new User()
-        {
-            userName = dto.UserName,
-            password = dto.PassWord
-        };
-
-        return validatedUser;
+        UserLoginDTO userDto = new UserLoginDTO(dto.UserName, true);
+        
+        return userDto;
 
     }
 

@@ -19,6 +19,7 @@ public class UsersController : ControllerBase
     
     
     [HttpPost]
+    [Route("CreateUser")]
     public async Task<ActionResult<User>> CreateAsync(UserCreationDTO dto)
     {
         try
@@ -35,11 +36,12 @@ public class UsersController : ControllerBase
 
     [HttpPost]
     [Route("login")]
-    public async Task<ActionResult<User>> GetAsync([FromBody] UserCreationDTO dto)
+    public async Task<ActionResult<UserLoginDTO>> GetAsync([FromBody] UserCreationDTO dto)
     {
         try
         {
-            User user = await userLogic.ValidateLogin(dto);
+            UserLoginDTO user;
+            user =  await userLogic.ValidateLogin(dto);
             return Ok(user);
         }
         catch (Exception e)

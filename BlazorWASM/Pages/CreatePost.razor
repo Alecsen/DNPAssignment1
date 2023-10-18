@@ -1,0 +1,56 @@
+﻿@page "/CreatePost"
+@using Domain.DTOs
+@using Application.Logic
+@using HttpClients.ClientInterfaces
+@inject IPostService postservice;
+<h3>Create a New Post</h3>
+
+<div class="form-group">
+    <label for="Title">Title:</label>
+    <input id="Title" @bind="title" class="form-control" />
+</div>
+
+<div class="form-group">
+    <label for="Body">Body:</label>
+    <textarea id="Body" @bind="body" class="form-control"></textarea>
+</div>
+
+<button @onclick="Create">Create Post</button>
+
+@if(!string.IsNullOrEmpty(resultMsg))
+{
+    <div class="@color">
+        @resultMsg
+    </div>
+}
+
+@code {
+    private string title = "";
+    private string body = "";
+    private string resultMsg = "";
+    private string color = "";
+    private readonly GlobalLoggedIn LoggedInUser;
+
+    public async Task Create()
+    {
+        resultMsg = "";
+        try
+        {
+            if (GlobalLoggedIn.Username == null)
+                throw new Exception("please login");
+            
+            await postservice.Create(new PostCreationDTO(GlobalLoggedIn.Username, title, body));
+            resultMsg = "Post successfully created";
+            color = "green";
+
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            resultMsg = e.Message;
+            color = "red";
+        }
+
+
+    }
+}

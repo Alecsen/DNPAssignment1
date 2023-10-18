@@ -19,6 +19,7 @@ public class UsersController : ControllerBase
     
     
     [HttpPost]
+    [Route("CreateUser")]
     public async Task<ActionResult<User>> CreateAsync(UserCreationDTO dto)
     {
         try
@@ -32,4 +33,22 @@ public class UsersController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
+
+    [HttpPost]
+    [Route("login")]
+    public async Task<ActionResult<UserLoginDTO>> GetAsync([FromBody] UserCreationDTO dto)
+    {
+        try
+        {
+            UserLoginDTO user;
+            user =  await userLogic.ValidateLogin(dto);
+            return Ok(user);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
+    
 }

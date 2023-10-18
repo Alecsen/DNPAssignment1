@@ -1,10 +1,10 @@
-﻿@page "/CreateUser"
+﻿@page "/Login"
 @using Domain.DTOs
 @using HttpClients.ClientInterfaces
-@inject IUserService userService;
+@inject IUserService UserService;
 
 <div class="card">
-    <h3>Create User</h3>
+   <h3>Login</h3>
     <div class="form-group field">
         <div>
         <label>User name:</label>
@@ -19,28 +19,24 @@
         }
     </div>
     <div class="button-row">
-        <button @onclick="Create" disabled="@(string.IsNullOrEmpty(username))"  class="acceptbtn">Create</button>
+        <button @onclick="login" disabled="@(string.IsNullOrEmpty(username))"  class="acceptbtn">Login</button>
     </div>
 </div>
 
-
 @code {
+
     private string username = "";
     private string password = "";
+    private bool loggedin = false;
     private string resultMsg = "";
     private string color = "";
-
-    private async Task Create()
+    private async Task login()
     {
         resultMsg = "";
-
         try
         {
-            await userService.Create(new UserCreationDTO(username,password));
-            username = "";
-            password = "";
-            resultMsg = "User successfully created";
-            color = "green";
+            UserLoginDTO user = await UserService.Login(new UserCreationDTO(username, password));
+            Console.WriteLine(user.userName + " and " + user.login);
         }
         catch (Exception e)
         {
@@ -49,5 +45,5 @@
             color = "red";
         }
     }
-
+    
 }

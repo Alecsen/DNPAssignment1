@@ -20,7 +20,7 @@ public class UserLogic : IUserLogic
         if (existing != null)
             throw new Exception("Username already taken!");
 
-        ValidateData(dto);
+        ValidateUserName(dto);
         User toCreate = new User
         {
             userName = dto.UserName,
@@ -32,7 +32,24 @@ public class UserLogic : IUserLogic
         return created;
     }
 
-    private void ValidateData(UserCreationDTO userToCreate)
+    public async Task<UserLoginDTO> ValidateLogin(UserCreationDTO dto)
+    {
+        User? existing = await userDao.GetByUsernameAsync(dto.UserName);
+        if (existing == null)
+            throw new Exception("User does not exist!");
+
+        if (dto.PassWord != existing.password)
+        {
+            throw new Exception("Wrong password");
+        }
+
+        UserLoginDTO userDto = new UserLoginDTO(dto.UserName, true);
+        
+        return userDto;
+
+    }
+
+    private void ValidateUserName(UserCreationDTO userToCreate)
     {
         string userName = userToCreate.UserName;
 

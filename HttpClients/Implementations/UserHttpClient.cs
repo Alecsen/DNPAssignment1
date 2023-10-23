@@ -17,7 +17,7 @@ public class UserHttpClient : IUserService
 
     public async Task<User> Create(UserCreationDTO dto)
     {
-        HttpResponseMessage response = await client.PostAsJsonAsync("/users", dto);
+        HttpResponseMessage response = await client.PostAsJsonAsync("/users/CreateUser", dto);
         string result = await response.Content.ReadAsStringAsync();
         if (!response.IsSuccessStatusCode)
         {
@@ -25,6 +25,22 @@ public class UserHttpClient : IUserService
         }
 
         User user = JsonSerializer.Deserialize<User>(result, new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        })!;
+        return user;
+    }
+
+    public async Task<UserLoginDTO> Login(UserCreationDTO dto)
+    {
+        HttpResponseMessage response = await client.PostAsJsonAsync("/users/login", dto);
+        string result = await response.Content.ReadAsStringAsync();
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception(result);
+        }
+
+        UserLoginDTO user = JsonSerializer.Deserialize<UserLoginDTO>(result, new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true
         })!;

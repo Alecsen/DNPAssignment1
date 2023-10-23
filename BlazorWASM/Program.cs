@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
-using BlazorWASM.Data;
+
 using HttpClients.ClientInterfaces;
 using HttpClients.Implementations;
 
@@ -9,8 +9,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddSingleton<WeatherForecastService>();
+
 builder.Services.AddScoped<IUserService, UserHttpClient>();
+builder.Services.AddScoped<IPostService, PostHttpClient>();
 builder.Services.AddScoped(
     sp => 
         new HttpClient { 

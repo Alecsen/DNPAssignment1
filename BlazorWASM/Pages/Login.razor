@@ -3,6 +3,7 @@
 @using HttpClients.ClientInterfaces
 @inject IUserService UserService;
 
+
 <div class="card">
    <h3>Login</h3>
     <div class="form-group field">
@@ -25,6 +26,7 @@
 
 @code {
 
+    private GlobalLoggedIn user;
     private string username = "";
     private string password = "";
     private bool loggedin = false;
@@ -36,6 +38,9 @@
         try
         {
             UserLoginDTO user = await UserService.Login(new UserCreationDTO(username, password));
+            GlobalLoggedIn.Username = user.userName;
+            resultMsg = $"You have logged in as User {GlobalLoggedIn.Username}";
+            color = "green";
             Console.WriteLine(user.userName + " and " + user.login);
         }
         catch (Exception e)

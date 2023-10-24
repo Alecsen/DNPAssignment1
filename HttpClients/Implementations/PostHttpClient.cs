@@ -31,4 +31,20 @@ public class PostHttpClient : IPostService
         })!;
         return post;
     }
+
+    public async Task<ICollection<Post>> GetAsync(string? userName, int? userId, string? titleContains, string? bodyContains)
+    {
+        HttpResponseMessage response = await client.GetAsync("/posts");
+        string content = await response.Content.ReadAsStringAsync();
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception(content);
+        }
+
+        ICollection<Post> posts = JsonSerializer.Deserialize<ICollection<Post>>(content, new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        })!;
+        return posts;
+    }
 }

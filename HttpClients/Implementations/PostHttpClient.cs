@@ -32,7 +32,7 @@ public class PostHttpClient : IPostService
         return post;
     }
 
-    public async Task<ICollection<Post>> GetAsync(string? userName, int? userId, string? titleContains, string? bodyContains)
+    public async Task<ICollection<Post>> GetAsync(string? userName, int? postId, string? titleContains, string? bodyContains)
     {
         HttpResponseMessage response = await client.GetAsync("/post");
         string content = await response.Content.ReadAsStringAsync();

@@ -30,7 +30,7 @@ else
         {
             <tr>
                 <td>@item.Id</td>
-                <td>@item.ToString()</td>
+                <td>@item.Owner.userName</td>
                 <td>@item.Title</td>
             </tr>
         }
@@ -51,7 +51,6 @@ else
         try
         {
             _posts = await postService.GetAsync(null, null, null, null);
-
         }
         catch (Exception e)
         {

@@ -7,7 +7,7 @@ public class Post
     public string Title { get; set; }
     public string body { get; set; }
 
-    public string toString()
+    public new string ToString()
     {
         return Owner.userName;
     }

@@ -3,6 +3,7 @@
 @using Application.Logic
 @using HttpClients.ClientInterfaces
 @inject IPostService postservice;
+@attribute [Authorize]
 <h3>Create a New Post</h3>
 
 <div class="form-group">

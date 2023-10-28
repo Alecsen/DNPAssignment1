@@ -1,12 +1,12 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Application.LogicInterface;
 using Domain.DTOs;
 using Domain.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using WepAPI.Services;
+
 
 namespace WepAPI.Controllers;
 
@@ -17,12 +17,12 @@ public class AuthController : ControllerBase
 {
     
     private readonly IConfiguration config;
-    private readonly IAuthService authService;
+    private readonly IUserLogic userLogic;
 
-    public AuthController(IConfiguration config, IAuthService authService)
+    public AuthController(IConfiguration config,IUserLogic userLogic)
     {
         this.config = config;
-        this.authService = authService;
+        this.userLogic = userLogic;
     }
     
     
@@ -31,7 +31,7 @@ public class AuthController : ControllerBase
     {
         try
         {
-            AuthenticationUser user = await authService.GetUser(userLoginDto.Username, userLoginDto.Password);
+            AuthenticationUser user = await userLogic.ValidateLogin(userLoginDto);
             string token = GenerateJwt(user);
     
             return Ok(token);

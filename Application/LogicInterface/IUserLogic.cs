@@ -7,5 +7,5 @@ public interface IUserLogic
 {
     public Task<AuthenticationUser> CreateAsync(UserCreationDTO dto);
 
-    public Task<UserLoginDTO> ValidateLogin(UserCreationDTO dto);
+    public Task<AuthenticationUser> ValidateLogin(AuthUserLoginDto dto);
 }

@@ -38,20 +38,18 @@ public class UserLogic : IUserLogic
         return created;
     }
 
-    public async Task<UserLoginDTO> ValidateLogin(UserCreationDTO dto)
+    public async Task<AuthenticationUser> ValidateLogin(AuthUserLoginDto dto)
     {
-        AuthenticationUser? existing = await userDao.GetByUsernameAsync(dto.UserName);
+        AuthenticationUser? existing = await userDao.GetByUsernameAsync(dto.Username);
         if (existing == null)
             throw new Exception("User does not exist!");
 
-        if (dto.PassWord != existing.Password)
+        if (dto.Password != existing.Password)
         {
             throw new Exception("Wrong password");
         }
-
-        UserLoginDTO userDto = new UserLoginDTO(dto.UserName, true);
         
-        return userDto;
+        return existing;
 
     }
 

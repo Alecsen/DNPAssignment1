@@ -1,6 +1,7 @@
-﻿using Application.LogicInterface;
+using Application.LogicInterface;
 using Domain.DTOs;
 using Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WepAPI.Controllers;
@@ -20,12 +21,12 @@ public class UsersController : ControllerBase
     
     [HttpPost]
     [Route("CreateUser")]
-    public async Task<ActionResult<User>> CreateAsync(UserCreationDTO dto)
+    public async Task<ActionResult<AuthenticationUser>> CreateAsync(UserCreationDTO dto)
     {
         try
         {
-            User user = await userLogic.CreateAsync(dto);
-            return Created($"/users/{user.Id}", user);
+            AuthenticationUser user = await userLogic.CreateAsync(dto);
+            return Created($"/users/{user.Username}", user);
         }
         catch (Exception e)
         {
@@ -35,4 +36,5 @@ public class UsersController : ControllerBase
     }
 
    
+    
 }

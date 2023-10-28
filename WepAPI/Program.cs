@@ -1,8 +1,13 @@
+using System.Text;
 using Application.DAOInterface;
 using Application.Logic;
 using Application.LogicInterface;
+using Domain.Auth;
 using FileData;
 using FileData.DAOs;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +22,22 @@ builder.Services.AddScoped<IUserDao, UserFileDao>();
 builder.Services.AddScoped<IUserLogic, UserLogic>();
 builder.Services.AddScoped<IPostLogic, PostLogic>();
 builder.Services.AddScoped<IPostDao, PostFileDao>();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+{
+    options.RequireHttpsMetadata = false;
+    options.SaveToken = true;
+    options.TokenValidationParameters = new TokenValidationParameters()
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+    };
+});
+
+AuthorizationPolicies.AddPolicies(builder.Services);
+
 var app = builder.Build();
 
 app.UseCors(x => x
@@ -32,9 +53,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-Console.WriteLine("created dev branch");
+
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

@@ -12,8 +12,9 @@ public class UserFileDao : IUserDao
         this.context = context;
     }
 
-    public Task<User> CreateAsync(User user)
+    public Task<AuthenticationUser> CreateAsync(AuthenticationUser user)
     {
+        /*
         int userId = 1;
         if (context.Users.Any())
         {
@@ -22,17 +23,17 @@ public class UserFileDao : IUserDao
         }
 
         user.Id = userId;
-
+        */
         context.Users.Add(user);
         context.SaveChanges();
 
         return Task.FromResult(user);
     }
 
-    public Task<User?> GetByUsernameAsync(string userName)
+    public Task<AuthenticationUser?> GetByUsernameAsync(string userName)
     {
-        User? existing = context.Users.FirstOrDefault(u =>
-            u.userName.Equals(userName, StringComparison.OrdinalIgnoreCase)
+        AuthenticationUser? existing = context.Users.FirstOrDefault(u =>
+            u.Username.Equals(userName, StringComparison.OrdinalIgnoreCase)
         );
         return Task.FromResult(existing);
     }

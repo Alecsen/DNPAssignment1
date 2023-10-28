@@ -10,23 +10,35 @@
 }
 else
 {
-    @foreach (var item in posts)
-    {
     <div>
-        <p><strong>Title:</strong> @item.Title</p>
-        <p><strong>Body:</strong> @item.body</p>
+        <p><strong>Title:</strong> @Post.Title</p>
+        <p><strong>Body:</strong> @Post.body</p>
     </div>
-    }
 }
 
 @code {
-    private ICollection<Post>? posts;
+    private string? usernameFilter;
+    private string? bodyContainsFilter;
+    private string? titleContainsFilter;
+    private Post Post;
+    private IEnumerable<Post>? posts;
     
     [Parameter]
     public string postId { get; set; }
     
     protected override async Task OnInitializedAsync()
     {
-        posts = await PostService.GetAsync(null, int.Parse(postId), null, null);
+        
+        posts = await PostService.GetAsync(usernameFilter, int.Parse(postId), titleContainsFilter, bodyContainsFilter);
+
+        foreach (var item in posts)
+        {
+            if (item.Id == int.Parse(postId))
+            {
+                Post = item;
+            }
+            
+        }
     }
+    
 }

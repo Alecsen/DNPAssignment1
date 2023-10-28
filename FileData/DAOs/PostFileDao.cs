@@ -45,6 +45,11 @@ public class PostFileDao : IPostDao
             result = context.Posts.Where(post => post.body == dto.Body);
         }
 
+        if (dto.PostId != null)
+        {
+            result = result.Where(r => r.Id == dto.PostId);
+        }
+
         return Task.FromResult(result);
     }
 }

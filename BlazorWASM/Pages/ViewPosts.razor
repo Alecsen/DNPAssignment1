@@ -30,10 +30,10 @@ else
         <tbody>
         @foreach (var item in _posts)
         {
-            <tr>
-                <td>@item.Id</td>
-                <td>@item.Owner.userName</td>
-                 <td><a @onclick="() => NavigateToPost(item.Id)">@item.Title</a></td>
+            <tr> 
+                <td><a @onclick="() => NavigateToPost(item.Id)">@item.Id</a></td>
+                <td><a @onclick="() => NavigateToPost(item.Id)">@item.Owner.userName</a></td>
+                <td><a @onclick="() => NavigateToPost(item.Id)">@item.Title</a></td>
             </tr>
         }
         </tbody>

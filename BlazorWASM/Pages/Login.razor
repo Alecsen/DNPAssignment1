@@ -1,54 +1,58 @@
 ﻿@page "/Login"
-@using Domain.DTOs
-@using HttpClients.ClientInterfaces
-@inject IUserService UserService;
-
-
-<div class="card">
-   <h3>Login</h3>
-    <div class="form-group field">
-        <div>
-        <label>User name:</label>
-            <input type="text" @bind="username" @bind:event="oninput"/>
+@using HttpClients.AuthServices
+@inject IAuthService authService
+@inject NavigationManager navMgr
+<AuthorizeView>
+    <NotAuthorized>
+        <div class="card">
+            <h3>Please login</h3>
+            <div class="field">
+                <label>User name:</label>
+                <input type="text" @bind="userName"/>
             </div>
-        <label>Password</label>
-        <input type="text" @bind="password" @bind:event="oninput"/>
-
-        @if (!string.IsNullOrEmpty(resultMsg))
-        {
-            <label style="color: @color">@resultMsg</label>
-        }
-    </div>
-    <div class="button-row">
-        <button @onclick="login" disabled="@(string.IsNullOrEmpty(username))"  class="acceptbtn">Login</button>
-    </div>
-</div>
+            <div class="field">
+                <label style="text-align: center">Password:</label>
+                <input type="password" @bind="password"/>
+            </div>
+            @if (!string.IsNullOrEmpty(errorLabel))
+            {
+                <div class="field">
+                    <label style="color: red">
+                        @errorLabel
+                    </label>
+                </div>
+            }
+            <div class="field">
+                <button class="loginbtn" @onclick="LoginAsync">Log in</button>
+            </div>
+        </div>
+    </NotAuthorized>
+    
+    <Authorized>
+        <div class="card">
+            <h3>Hello, @context.User.Identity.Name</h3>
+        </div>
+    </Authorized>
+    
+</AuthorizeView>
 
 @code {
+    private string userName;
+    private string password;
+    private string errorLabel;
 
-    private GlobalLoggedIn user;
-    private string username = "";
-    private string password = "";
-    private bool loggedin = false;
-    private string resultMsg = "";
-    private string color = "";
-    private async Task login()
+    private async Task LoginAsync()
     {
-        resultMsg = "";
+        errorLabel = "";
         try
         {
-            UserLoginDTO user = await UserService.Login(new UserCreationDTO(username, password));
-            GlobalLoggedIn.Username = user.userName;
-            resultMsg = $"You have logged in as User {GlobalLoggedIn.Username}";
-            color = "green";
-            Console.WriteLine(user.userName + " and " + user.login);
+            await authService.LoginAsync(userName, password);
+            navMgr.NavigateTo("/");
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
-            resultMsg = e.Message;
-            color = "red";
+            errorLabel = $"Error: {e.Message}";
         }
     }
-    
 }

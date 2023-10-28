@@ -34,20 +34,5 @@ public class UsersController : ControllerBase
         }
     }
 
-    [HttpPost]
-    [Route("login")]
-    public async Task<ActionResult<UserLoginDTO>> GetAsync([FromBody] UserCreationDTO dto)
-    {
-        try
-        {
-            UserLoginDTO user;
-            user =  await userLogic.ValidateLogin(dto);
-            return Ok(user);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            return StatusCode(500, e.Message);
-        }
-    }
+   
 }

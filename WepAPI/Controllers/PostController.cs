@@ -9,7 +9,6 @@ namespace WepAPI.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-[Authorize]
 public class PostController : ControllerBase
 {
     private readonly IPostLogic postLogic;

@@ -36,7 +36,7 @@ public class PostHttpClient : IPostService
     {
         string query = ConstructQuery(userName, postId, titleContains, bodyContains);
         
-        HttpResponseMessage response = await client.GetAsync("/post" + query);
+        HttpResponseMessage response = await client.GetAsync("/post");
         string content = await response.Content.ReadAsStringAsync();
         if (!response.IsSuccessStatusCode)
         {

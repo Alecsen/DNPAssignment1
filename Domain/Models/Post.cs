@@ -6,6 +6,5 @@ public class Post
     public AuthenticationUser Owner { get; set; }
     public string Title { get; set; }
     public string body { get; set; }
-
-   
+    
 }

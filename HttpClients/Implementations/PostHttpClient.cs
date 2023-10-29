@@ -31,4 +31,51 @@ public class PostHttpClient : IPostService
         })!;
         return post;
     }
+
+    public async Task<ICollection<Post>> GetAsync(string? userName, int? postId, string? titleContains, string? bodyContains)
+    {
+        string query = ConstructQuery(userName, postId, titleContains, bodyContains);
+        
+        HttpResponseMessage response = await client.GetAsync("/post" + query);
+        string content = await response.Content.ReadAsStringAsync();
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception(content);
+        }
+
+        ICollection<Post> posts = JsonSerializer.Deserialize<ICollection<Post>>(content, new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        })!;
+        return posts;
+    }
+    
+    private static string ConstructQuery(string? userName, int? postId, string? titleContains, string? bodyContains)
+    {
+        string query = "";
+        if (!string.IsNullOrEmpty(userName))
+        {
+            query += $"?username={userName}";
+        }
+
+        if (postId != null)
+        {
+            query += string.IsNullOrEmpty(query) ? "?" : "&";
+            query += $"userid={postId}";
+        }
+
+        if (!string.IsNullOrEmpty(bodyContains))
+        {
+            query += string.IsNullOrEmpty(query) ? "?" : "&";
+            query += $"bodyContains={bodyContains}";
+        }
+
+        if (!string.IsNullOrEmpty(titleContains))
+        {
+            query += string.IsNullOrEmpty(query) ? "?" : "&";
+            query += $"titlecontains={titleContains}";
+        }
+
+        return query;
+    }
 }

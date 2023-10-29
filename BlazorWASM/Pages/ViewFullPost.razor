@@ -1,0 +1,44 @@
+﻿@page "/ViewFullPost/{postId}"
+@using HttpClients.ClientInterfaces
+@using Domain.Models
+@inject IPostService PostService 
+
+<h3>ViewFullPost</h3>
+@if (posts == null)
+{
+    <p>Post is loading...</p>
+}
+else
+{
+    <div>
+        <p><strong>Title:</strong> @Post.Title</p>
+        <p><strong>Body:</strong> @Post.body</p>
+    </div>
+}
+
+@code {
+    private string? usernameFilter;
+    private string? bodyContainsFilter;
+    private string? titleContainsFilter;
+    private Post Post;
+    private IEnumerable<Post>? posts;
+    
+    [Parameter]
+    public string postId { get; set; }
+    
+    protected override async Task OnInitializedAsync()
+    {
+        
+        posts = await PostService.GetAsync(usernameFilter, int.Parse(postId), titleContainsFilter, bodyContainsFilter);
+
+        foreach (var item in posts)
+        {
+            if (item.Id == int.Parse(postId))
+            {
+                Post = item;
+            }
+            
+        }
+    }
+    
+}

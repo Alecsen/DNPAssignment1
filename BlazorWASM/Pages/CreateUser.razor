@@ -3,50 +3,55 @@
 @using HttpClients.ClientInterfaces
 @inject IUserService userService;
 
-<div class="card">
-    <h3>Create User</h3>
-    <div class="form-group">
-        <div class="field">
-            <label>User name:</label>
-            <input type="text" @bind="username" @bind:event="oninput"/>
+<AuthorizeView>
+    <NotAuthorized>
+        <div class="card">
+            <h3>Create User</h3>
+            <div class="form-group">
+                <div class="field">
+                    <label>User name:</label>
+                    <input type="text" @bind="username" @bind:event="oninput"/>
+                </div>
+                <div class="field">
+                    <label>Password:</label>
+                    <input type="password" @bind="password" @bind:event="oninput"/>
+                </div>
+                <div class="field">
+                    <label>Email:</label>
+                    <input type="email" @bind="email" @bind:event="oninput"/>
+                </div>
+                <div class="field">
+                    <label>Domain:</label>
+                    <input type="text" @bind="domain" @bind:event="oninput"/>
+                </div>
+                <div class="field">
+                    <label>Name:</label>
+                    <input type="text" @bind="name" @bind:event="oninput"/>
+                </div>
+                <div class="field">
+                    <label>Role:</label>
+                    <input type="text" @bind="role" @bind:event="oninput"/>
+                </div>
+                <div class="field">
+                    <label>Age:</label>
+                    <input type="number" @bind="age" @bind:event="oninput"/>
+                </div>
+                <div class="field">
+                    <label>Security Level:</label>
+                    <input type="number" @bind="securityLevel" @bind:event="oninput"/>
+                </div>
+                @if (!string.IsNullOrEmpty(resultMsg))
+                {
+                    <label style="color: @color">@resultMsg</label>
+                }
+            </div>
+            <div class="button-row">
+                <button @onclick="Create" class="acceptbtn" disabled="@IsCreateButtonDisabled()">Create</button>
+            </div>
         </div>
-        <div class="field">
-            <label>Password:</label>
-            <input type="password" @bind="password" @bind:event="oninput"/>
-        </div>
-        <div class="field">
-            <label>Email:</label>
-            <input type="email" @bind="email" @bind:event="oninput"/>
-        </div>
-        <div class="field">
-            <label>Domain:</label>
-            <input type="text" @bind="domain" @bind:event="oninput"/>
-        </div>
-        <div class="field">
-            <label>Name:</label>
-            <input type="text" @bind="name" @bind:event="oninput"/>
-        </div>
-        <div class="field">
-            <label>Role:</label>
-            <input type="text" @bind="role" @bind:event="oninput"/>
-        </div>
-        <div class="field">
-            <label>Age:</label>
-            <input type="number" @bind="age" @bind:event="oninput"/>
-        </div>
-        <div class="field">
-            <label>Security Level:</label>
-            <input type="number" @bind="securityLevel" @bind:event="oninput"/>
-        </div>
-        @if (!string.IsNullOrEmpty(resultMsg))
-        {
-            <label style="color: @color">@resultMsg</label>
-        }
-    </div>
-    <div class="button-row">
-        <button @onclick="Create" class="acceptbtn" disabled="@IsCreateButtonDisabled()">Create</button>
-    </div>
-</div>
+    </NotAuthorized>
+</AuthorizeView>
+
 
 @code {
     private string username = "";

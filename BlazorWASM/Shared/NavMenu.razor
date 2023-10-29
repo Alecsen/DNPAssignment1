@@ -7,31 +7,37 @@
     </div>
 </div>
 
-<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
-            </NavLink>
+        <div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
+            <nav class="flex-column">
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                        <span class="oi oi-home" aria-hidden="true"></span> Home
+                    </NavLink>
+                </div>
+                <AuthorizeView>
+                <NotAuthorized>
+                    <div class="nav-item px-3">
+                        <NavLink class="nav-link" href="createuser">
+                            <span class="oi oi-list-rich" aria-hidden="true"></span> Create User
+                        </NavLink>
+                    </div>
+                </NotAuthorized>
+                <Authorized>
+                    <div class="nav-item px-3">
+                        <NavLink class="nav-link" href="createpost">
+                            <span class="oi oi-list-rich" aria-hidden="true"></span> Create Post
+                        </NavLink>
+                    </div>
+                    <div class="nav-item px-3">
+                        <NavLink class="nav-link" href="viewposts">
+                            <span class="oi oi-list-rich" aria-hidden="true"></span> View Posts
+                        </NavLink>
+                    </div>
+                </Authorized>
+                </AuthorizeView>
+            </nav>
         </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="createuser">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Create User
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="createpost">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Create Post
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="viewposts">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> View Posts
-            </NavLink>
-            </div>
-        
-    </nav>
-</div>
+
 
 @code {
     private bool collapseNavMenu = true;

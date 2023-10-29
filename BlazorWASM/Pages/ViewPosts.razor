@@ -6,14 +6,11 @@
 
 <h3>ViewPosts</h3>
 
-<div>
-    <button @onclick="LoadPosts">Load</button>
-</div>
-
 @if (_posts == null)
 {
-    
-} else if (!_posts.Any())
+    <p>Loading...</p>
+}
+else if (!_posts.Any())
 {
     <p>No Posts to display</p>
 }
@@ -48,7 +45,7 @@ else
     private IEnumerable<Post>? _posts;
     private string msg = "";
 
-    private async Task LoadPosts()
+    protected override async Task OnInitializedAsync()
     {
         try
         {

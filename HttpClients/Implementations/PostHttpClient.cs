@@ -1,7 +1,9 @@
-﻿using System.Net.Http.Json;
+﻿using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Text.Json;
 using Domain.DTOs;
 using Domain.Models;
+using HttpClients.AuthServices;
 using HttpClients.ClientInterfaces;
 
 namespace HttpClients.Implementations;
@@ -18,6 +20,7 @@ public class PostHttpClient : IPostService
 
     public async Task<Post> Create(PostCreationDTO dto)
     {
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", JwtAuthService.Jwt);
         HttpResponseMessage response = await client.PostAsJsonAsync("/post/createPost", dto);
         string result = await response.Content.ReadAsStringAsync();
         if (!response.IsSuccessStatusCode)

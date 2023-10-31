@@ -14,38 +14,42 @@ public class UserLogic : IUserLogic
         this.userDao = userDao;
     }
 
-    public async Task<User> CreateAsync(UserCreationDTO dto)
+    public async Task<AuthenticationUser> CreateAsync(UserCreationDTO dto)
     {
-        User? existing = await userDao.GetByUsernameAsync(dto.UserName);
+        AuthenticationUser? existing = await userDao.GetByUsernameAsync(dto.UserName);
         if (existing != null)
             throw new Exception("Username already taken!");
 
         ValidateUserName(dto);
-        User toCreate = new User
+        AuthenticationUser toCreate = new AuthenticationUser()
         {
-            userName = dto.UserName,
-            password = dto.PassWord
+            Username = dto.UserName,
+            Age = dto.Age,
+            Domain = dto.Domain,
+            Email = dto.Email,
+            Name = dto.Name,
+            Password = dto.PassWord,
+            Role = dto.Role,
+            SecurityLevel = dto.SecurityLevel
         };
         
-        User created = await userDao.CreateAsync(toCreate);
+        AuthenticationUser created = await userDao.CreateAsync(toCreate);
         
         return created;
     }
 
-    public async Task<UserLoginDTO> ValidateLogin(UserCreationDTO dto)
+    public async Task<AuthenticationUser> ValidateLogin(AuthUserLoginDto dto)
     {
-        User? existing = await userDao.GetByUsernameAsync(dto.UserName);
+        AuthenticationUser? existing = await userDao.GetByUsernameAsync(dto.Username);
         if (existing == null)
             throw new Exception("User does not exist!");
 
-        if (dto.PassWord != existing.password)
+        if (dto.Password != existing.Password)
         {
             throw new Exception("Wrong password");
         }
-
-        UserLoginDTO userDto = new UserLoginDTO(dto.UserName, true);
         
-        return userDto;
+        return existing;
 
     }
 

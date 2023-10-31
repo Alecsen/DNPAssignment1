@@ -1,0 +1,65 @@
+@page "/ViewPosts"
+@using Domain.Models
+@using HttpClients.ClientInterfaces
+@inject IPostService postService
+@inject NavigationManager navigationManager
+
+<h3>ViewPosts</h3>
+
+@if (_posts == null)
+{
+    <p>Loading...</p>
+}
+else if (!_posts.Any())
+{
+    <p>No Posts to display</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Post ID</th>
+            <th>Owner ID</th>
+            <th>Title</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in _posts)
+        {
+            <tr> 
+                <td><a @onclick="() => NavigateToPost(item.Id)">@item.Id</a></td>
+                <td><a @onclick="() => NavigateToPost(item.Id)">@item.Owner.Username</a></td>
+                <td><a @onclick="() => NavigateToPost(item.Id)">@item.Title</a></td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+@if (!string.IsNullOrEmpty(msg))
+{
+    <label style="color: red">@msg</label>
+}
+
+@code {
+    private IEnumerable<Post>? _posts;
+    private string msg = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            _posts = await postService.GetAsync(null, null, null, null);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            msg = e.Message;
+        }
+    }
+
+    private void NavigateToPost(int postId)
+    {
+        navigationManager.NavigateTo($"/ViewFullPost/{postId}");
+    }
+}

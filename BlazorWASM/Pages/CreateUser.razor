@@ -3,32 +3,70 @@
 @using HttpClients.ClientInterfaces
 @inject IUserService userService;
 
-<div class="card">
-    <h3>Create User</h3>
-    <div class="form-group field">
-        <div>
-        <label>User name:</label>
-            <input type="text" @bind="username" @bind:event="oninput"/>
+<AuthorizeView>
+    <NotAuthorized>
+        <div class="card">
+            <h3>Create User</h3>
+            <div class="form-group">
+                <div class="field">
+                    <label>User name:</label>
+                    <input type="text" @bind="username" @bind:event="oninput"/>
+                </div>
+                <div class="field">
+                    <label>Password:</label>
+                    <input type="password" @bind="password" @bind:event="oninput"/>
+                </div>
+                <div class="field">
+                    <label>Email:</label>
+                    <input type="email" @bind="email" @bind:event="oninput"/>
+                </div>
+                <div class="field">
+                    <label>Domain:</label>
+                    <input type="text" @bind="domain" @bind:event="oninput"/>
+                </div>
+                <div class="field">
+                    <label>Name:</label>
+                    <input type="text" @bind="name" @bind:event="oninput"/>
+                </div>
+                <div class="field">
+                    <label>Role:</label>
+                    <input type="text" @bind="role" @bind:event="oninput"/>
+                </div>
+                <div class="field">
+                    <label>Age:</label>
+                    <input type="number" @bind="age" @bind:event="oninput"/>
+                </div>
+                <div class="field">
+                    <label>Security Level:</label>
+                    <input type="number" @bind="securityLevel" @bind:event="oninput"/>
+                </div>
+                @if (!string.IsNullOrEmpty(resultMsg))
+                {
+                    <label style="color: @color">@resultMsg</label>
+                }
             </div>
-        <label>Password</label>
-        <input type="text" @bind="password" @bind:event="oninput"/>
-
-        @if (!string.IsNullOrEmpty(resultMsg))
-        {
-            <label style="color: @color">@resultMsg</label>
-        }
-    </div>
-    <div class="button-row">
-        <button @onclick="Create" disabled="@(string.IsNullOrEmpty(username))"  class="acceptbtn">Create</button>
-    </div>
-</div>
+            <div class="button-row">
+                <button @onclick="Create" class="acceptbtn" disabled="@IsCreateButtonDisabled()">Create</button>
+            </div>
+        </div>
+    </NotAuthorized>
+</AuthorizeView>
 
 
 @code {
     private string username = "";
     private string password = "";
+    private string email = "";
+    private string domain = "";
+    private string name = "";
+    private string role = "";
+    private int age = 0;
+    private int securityLevel = 0;
     private string resultMsg = "";
     private string color = "";
+
+    private bool IsCreateButtonDisabled() => 
+        string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password);
 
     private async Task Create()
     {
@@ -36,9 +74,20 @@
 
         try
         {
-            await userService.Create(new UserCreationDTO(username,password));
-            username = "";
-            password = "";
+            var newUser = new UserCreationDTO
+            {
+                UserName = username,
+                PassWord = password,
+                Email = email,
+                Domain = domain,
+                Name = name,
+                Role = role,
+                Age = age,
+                SecurityLevel = securityLevel
+            };
+
+            await userService.Create(newUser);
+            ClearForm();
             resultMsg = "User successfully created";
             color = "green";
         }
@@ -50,4 +99,15 @@
         }
     }
 
+    private void ClearForm()
+    {
+        username = "";
+        password = "";
+        email = "";
+        domain = "";
+        name = "";
+        role = "";
+        age = 0;
+        securityLevel = 0;
+    }
 }

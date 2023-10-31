@@ -1,0 +1,26 @@
+POST https://localhost:7107/auth/login
+Content-Type: application/json
+
+{ "Username" : "axeku", "Password" : "1234" }
+
+###
+
+POST https://localhost:7107/auth/login
+Content-Type: application/json
+
+{ "Username" : "Krollo", "Password" : "password" }
+
+###
+
+POST https://localhost:7107/auth/login
+Content-Type: application/json
+
+{ "Username" : "Krollo", "Password" : "passord" }
+
+###
+
+POST https://localhost:7107/auth/login
+Content-Type: application/json
+
+{ "Username" : "axeku", "Password" : "234" }
+

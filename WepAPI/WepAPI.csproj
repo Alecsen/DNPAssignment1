@@ -13,6 +13,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\EfcDataAccess\EfcDataAccess.csproj" />
       <ProjectReference Include="..\FileData\FileData.csproj" />
     </ItemGroup>
 

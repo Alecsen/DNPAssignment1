@@ -19,7 +19,6 @@ public class PostController : ControllerBase
     }
   
     [HttpPost]
-    [Route("createPost"),Authorize]
     public async Task<ActionResult<Post>> createAsync([FromBody]PostCreationDTO dto)
     {
         try
@@ -35,11 +34,11 @@ public class PostController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Post>>> GetAsync([FromQuery] int? postId, [FromQuery] string? title, [FromQuery] string? body)
+    public async Task<ActionResult<IEnumerable<Post>>> GetAsync([FromBody] PostSearchParametersDto dto)
     {
         try
         {
-            PostSearchParametersDto parameters = new(postId, title, body);
+            PostSearchParametersDto parameters = new(dto.UserName,dto.PostId,dto.Title,dto.Body);
             var posts = await postLogic.GetAsync(parameters);
             return Ok(posts);
         }

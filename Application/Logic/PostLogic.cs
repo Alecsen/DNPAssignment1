@@ -19,16 +19,16 @@ public class PostLogic : IPostLogic
 
     public async Task<Post> CreateAsync(PostCreationDTO dto)
     {
-        AuthenticationUser? ownerUsername = await userDao.GetByUsernameAsync(dto.Username);
-        if (ownerUsername == null)
+        
+        if (dto.Username == null)
             throw new Exception("You need to Login first!");
         
-        Post toCreate = new Post
-        {
-            Owner = ownerUsername,
-            body = dto.body,
-            Title = dto.Title
-        };
+        AuthenticationUser? ownerUsername = await userDao.GetByUsernameAsync(dto.Username);
+        
+        if (ownerUsername == null)
+            throw new Exception("Username does not exist");
+
+        Post toCreate = new Post(ownerUsername.Id, dto.Title, dto.body);
 
         Post Created = await postDao.CreateAsync(toCreate);
 

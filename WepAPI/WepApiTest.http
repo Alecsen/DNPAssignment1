@@ -24,3 +24,16 @@ Content-Type: application/json
 
 { "Username" : "axeku", "Password" : "234" }
 
+
+###
+POST https://localhost:7107/Users/CreateUser
+Content-Type: application/json
+
+{"userName": "axeku",
+  "passWord": "234",
+  "email": "alecsen@gmail.com",
+  "domain": "gmail.com",
+  "name": "Alexander",
+  "role": "god",
+  "age": 24,
+  "securityLevel": 5}
